@@ -8,67 +8,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Status {
-  ACTIVE
-  INACTIVE
-}
-
-enum Situation {
-  APPROVED
-  PENDING
-  REJECTED
-}
-
-enum Difficulty {
-  EASY
-  MEDIUM
-  HARD
-}
-
 model User {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
-  status     Status   @default(ACTIVE)
 
-  pv       Int
-  name     String
-  email    String  @unique
-  phone    String  @unique
-  password String
-  avatar   String?
-  bio      String?
+  pv       Int     @db.TinyInt
+  status   Int     @db.TinyInt
+  name     String  @db.VarChar(75)
+  email    String  @unique @db.VarChar(100)
+  phone    String  @unique @db.VarChar(15)
+  password String  @db.VarChar(60)
+  avatar   String? @db.VarChar(255)
+  bio      String? @db.Text
 
-  school_id            Int?
-  team_id              Int?
+  institution_id Int?
+  team_id        Int?
+
   team                 Team?                 @relation(fields: [team_id], references: [id], onDelete: Cascade)
-  school               School?               @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  institution          Institution?          @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  teamRequests         TeamRequest[]
   subjects             Subject[]
   battles              Battle[]
   communities          Community[]
-  posts                Post[]
-  likes                Like[]
-  teamRequests         TeamRequest[]
+  communityPosts       CommunityPost[]
+  communityPostLikes   CommunityPostLike[]
+  questions            Question[]
+  questionAnswers      QuestionAnswer[]
+  challenges           Challenge[]
   challengeSubmissions ChallengeSubmission[]
   notifications        Notification[]
-  answers              Answer[]
+
+  @@map("user")
 }
 
-model School {
-  id         Int       @id @default(autoincrement())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  situation  Situation @default(PENDING)
+model Institution {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 
-  stripe_id   String?
-  name        String
-  slug        String  @unique
-  description String?
-  logo        String?
-  address     String
-  phone       String
-  email       String
-  cpf_cnpj    String
+  situation Int     @db.TinyInt
+  stripe_id String? @db.VarChar(64)
+  name      String  @db.VarChar(75)
+  slug      String  @unique @db.VarChar(100)
+  bio       String? @db.Text
+  logo      String? @db.VarChar(255)
+  address   String  @db.VarChar(255)
+  phone     String  @db.VarChar(15)
+  email     String  @db.VarChar(100)
+  document  String  @db.VarChar(14)
 
   subjects    Subject[]
   battles     Battle[]
@@ -76,257 +64,296 @@ model School {
   communities Community[]
   teams       Team[]
   challenges  Challenge[]
+
+  @@index([slug])
+  @@map("institution")
 }
 
 model Subject {
-  id         Int      @id @default(autoincrement())
+  id             Int @id @default(autoincrement())
+  institution_id Int
+
+  name String @db.VarChar(75)
+  slug String @unique @db.VarChar(100)
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  school_id Int
+  institution Institution @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  battles     Battle[]
+  users       User[]
+  questions   Question[]
 
-  school  School   @relation(fields: [school_id], references: [id], onDelete: Cascade)
-  battles Battle[]
-  users   User[]
-}
-
-enum BattleType {
-  SOLO
-  TEAM
-}
-
-enum BattleStatus {
-  PENDING
-  IN_PROGRESS
-  FINISHED
+  @@index([slug])
+  @@map("subject")
 }
 
 model Battle {
-  id         Int          @id @default(autoincrement())
-  created_at DateTime     @default(now())
-  updated_at DateTime     @default(now()) @updatedAt
-  status     BattleStatus @default(PENDING)
+  id             Int @id @default(autoincrement())
+  subject_id     Int
+  institution_id Int
 
-  duration   Int
-  subject_id Int
-  school_id  Int
-  slug       String     @unique
-  name       String
-  type       BattleType
+  duration    Int
+  status      Int    @db.TinyInt
+  battle_type Int    @db.TinyInt
+  slug        String @unique @db.VarChar(100)
+  name        String @db.VarChar(75)
 
-  subject   Subject    @relation(fields: [subject_id], references: [id], onDelete: Cascade)
-  school    School     @relation(fields: [school_id], references: [id], onDelete: Cascade)
-  users     User[]
-  rounds    Round[]
-  questions Question[]
-}
-
-model Round {
-  id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  round     Int
+  subject      Subject       @relation(fields: [subject_id], references: [id], onDelete: Cascade)
+  institution  Institution   @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  users        User[]
+  battleRounds BattleRound[]
+  questions    Question[]
+
+  @@index([slug])
+  @@map("battle")
+}
+
+model BattleRound {
+  id        Int @id @default(autoincrement())
   battle_id Int
+
+  round     Int    @db.TinyInt
   max_score Int
-  name      String
+  name      String @db.VarChar(75)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 
   battle    Battle     @relation(fields: [battle_id], references: [id], onDelete: Cascade)
   questions Question[]
+
+  @@map("battle_round")
 }
 
 model Question {
-  id         Int      @id @default(autoincrement())
+  id              Int  @id @default(autoincrement())
+  user_id         Int
+  subject_id      Int
+  battle_id       Int?
+  battle_round_id Int?
+
+  status     Int    @db.TinyInt
+  difficulty Int    @db.TinyInt
+  content    String @db.Text
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  battle_id  Int?
-  round_id   Int?
-  content    String
-  difficulty Difficulty
-  level      Int
+  battle          Battle?          @relation(fields: [battle_id], references: [id], onDelete: Cascade)
+  battleRound     BattleRound?     @relation(fields: [battle_round_id], references: [id], onDelete: Cascade)
+  user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  subject         Subject          @relation(fields: [subject_id], references: [id])
+  questionOptions QuestionOption[]
+  questionAnswers QuestionAnswer[]
 
-  battle  Battle?  @relation(fields: [battle_id], references: [id], onDelete: Cascade)
-  round   Round?   @relation(fields: [round_id], references: [id], onDelete: Cascade)
-  options Option[]
-  answers Answer[]
-
-  @@index([battle_id, round_id])
+  @@index([battle_id, battle_round_id])
+  @@map("question")
 }
 
-model Option {
-  id         Int      @id @default(autoincrement())
+model QuestionOption {
+  id          Int @id @default(autoincrement())
+  question_id Int
+
+  content    String  @db.Text
+  is_correct Boolean
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  question_id Int
-  content     String
-  isCorrect   Boolean
+  question        Question         @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  questionAnswers QuestionAnswer[]
 
-  question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
-  answers  Answer[]
+  @@map("question_option")
 }
 
-model Answer {
-  id         Int      @id @default(autoincrement())
+model QuestionAnswer {
+  id                 Int @id @default(autoincrement())
+  user_id            Int
+  question_option_id Int
+  question_id        Int
+
+  score Int?
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  score       Int?
-  user_id     Int
-  option_id   Int
-  question_id Int
-
-  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  option   Option   @relation(fields: [option_id], references: [id], onDelete: Cascade)
-  question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  user           User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  questionOption QuestionOption @relation(fields: [question_option_id], references: [id], onDelete: Cascade)
+  question       Question       @relation(fields: [question_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, question_id])
+  @@map("question_answer")
 }
 
 model Challenge {
-  id         Int      @id @default(autoincrement())
+  id             Int  @id @default(autoincrement())
+  user_id        Int
+  institution_id Int?
+  team_id        Int?
+
+  name        String @db.VarChar(75)
+  description String @db.Text
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  school_id   Int?
-  team_id     Int?
-  name        String
-  description String
-
-  school               School?               @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  institution          Institution?          @relation(fields: [institution_id], references: [id], onDelete: Cascade)
   team                 Team?                 @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  user                 User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   files                File[]
   challengeSubmissions ChallengeSubmission[]
+
+  @@map("challenge")
 }
 
 model ChallengeSubmission {
-  id         Int       @id @default(autoincrement())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  status     Situation @default(PENDING)
-
+  id           Int @id @default(autoincrement())
   user_id      Int
   challenge_id Int
-  score        Int?
-  feedback     String?
-  links        String?
+
+  status   Int     @db.TinyInt
+  score    Int?
+  feedback String? @db.Text
+  links    String? @db.Text
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 
   user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
   challenge Challenge @relation(fields: [challenge_id], references: [id], onDelete: Cascade)
   files     File[]
+
+  @@map("challenge_submission")
 }
 
 model Community {
-  id         Int      @id @default(autoincrement())
+  id             Int @id @default(autoincrement())
+  institution_id Int
+
+  name String @db.VarChar(75)
+  slug String @unique @db.VarChar(100)
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  school_id Int
-  name      String
-  slug      String @unique
+  institution    Institution     @relation(fields: [institution_id], references: [id], onDelete: Cascade)
+  users          User[]
+  communityPosts CommunityPost[]
 
-  school School @relation(fields: [school_id], references: [id], onDelete: Cascade)
-  users  User[]
-  posts  Post[]
+  @@index([slug])
+  @@map("community")
 }
 
 model Team {
-  id         Int      @id @default(autoincrement())
+  id             Int @id @default(autoincrement())
+  institution_id Int
+
+  name String @db.VarChar(75)
+  slug String @unique @db.VarChar(100)
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  school_id Int
-  name      String
-  slug      String @unique
-
-  school        School         @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  institution   Institution    @relation(fields: [institution_id], references: [id], onDelete: Cascade)
   users         User[]
   teamRequests  TeamRequest[]
   challenges    Challenge[]
   notifications Notification[]
+
+  @@index([slug])
+  @@map("team")
 }
 
 model TeamRequest {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
+  id      Int @id @default(autoincrement())
   team_id Int
   user_id Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 
   team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([team_id, user_id])
+  @@map("team_request")
 }
 
-model Post {
-  id         Int       @id @default(autoincrement())
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  situation  Situation @default(PENDING)
-
+model CommunityPost {
+  id           Int @id @default(autoincrement())
   community_id Int
   user_id      Int
-  title        String
-  content      String
 
-  community Community @relation(fields: [community_id], references: [id], onDelete: Cascade)
-  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  likes     Like[]
-  files     File[]
+  situation Int    @db.TinyInt
+  title     String @db.VarChar(75)
+  content   String @db.Text
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  community          Community           @relation(fields: [community_id], references: [id], onDelete: Cascade)
+  user               User                @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  communityPostLikes CommunityPostLike[]
+  files              File[]
+
+  @@map("community_post")
 }
 
 model File {
-  id         Int      @id @default(autoincrement())
+  id                      Int  @id @default(autoincrement())
+  community_post_id       Int?
+  challenge_id            Int?
+  challenge_submission_id Int?
+
+  name String @db.VarChar(75)
+  url  String @db.VarChar(255)
+  type String @db.VarChar(16)
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  post_id                Int?
-  challenge_id           Int?
-  challenge_submissionId Int?
-  name                   String
-  url                    String
-  type                   String
-
-  post                 Post?                @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  communityPost        CommunityPost?       @relation(fields: [community_post_id], references: [id], onDelete: Cascade)
   challenge            Challenge?           @relation(fields: [challenge_id], references: [id], onDelete: Cascade)
-  challenge_submission ChallengeSubmission? @relation(fields: [challenge_submissionId], references: [id])
+  challenge_submission ChallengeSubmission? @relation(fields: [challenge_submission_id], references: [id])
+
+  @@map("file")
 }
 
-model Like {
-  id         Int      @id @default(autoincrement())
+model CommunityPostLike {
+  id                Int @id @default(autoincrement())
+  community_post_id Int
+  user_id           Int
+
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  post_id Int
-  user_id Int
+  communityPost CommunityPost @relation(fields: [community_post_id], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-
-  @@unique([post_id, user_id])
-}
-
-enum NotificationType {
-  LIKE
-  COMMENT
-  FOLLOW
-  TEAM_REQUEST
+  @@unique([community_post_id, user_id])
+  @@map("community_post_like")
 }
 
 model Notification {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now()) @updatedAt
-
+  id      Int  @id @default(autoincrement())
   user_id Int?
   team_id Int?
 
-  type NotificationType
-  read Boolean          @default(false)
+  type    Int     @db.TinyInt
+  title   String  @db.VarChar(75)
+  content String  @db.Text
+  link    String? @db.VarChar(255)
+  read    Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
 
   user User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
   team Team? @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  @@map("notification")
 }
