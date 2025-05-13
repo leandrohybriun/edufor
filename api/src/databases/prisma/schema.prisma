@@ -1,0 +1,332 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../generated"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Situation {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+  status     Status   @default(ACTIVE)
+
+  pv       Int
+  name     String
+  email    String  @unique
+  phone    String  @unique
+  password String
+  avatar   String?
+  bio      String?
+
+  school_id            Int?
+  team_id              Int?
+  team                 Team?                 @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  school               School?               @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  subjects             Subject[]
+  battles              Battle[]
+  communities          Community[]
+  posts                Post[]
+  likes                Like[]
+  teamRequests         TeamRequest[]
+  challengeSubmissions ChallengeSubmission[]
+  notifications        Notification[]
+  answers              Answer[]
+}
+
+model School {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  situation  Situation @default(PENDING)
+
+  stripe_id   String?
+  name        String
+  slug        String  @unique
+  description String?
+  logo        String?
+  address     String
+  phone       String
+  email       String
+  cpf_cnpj    String
+
+  subjects    Subject[]
+  battles     Battle[]
+  users       User[]
+  communities Community[]
+  teams       Team[]
+  challenges  Challenge[]
+}
+
+model Subject {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  school_id Int
+
+  school  School   @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  battles Battle[]
+  users   User[]
+}
+
+enum BattleType {
+  SOLO
+  TEAM
+}
+
+enum BattleStatus {
+  PENDING
+  IN_PROGRESS
+  FINISHED
+}
+
+model Battle {
+  id         Int          @id @default(autoincrement())
+  created_at DateTime     @default(now())
+  updated_at DateTime     @default(now()) @updatedAt
+  status     BattleStatus @default(PENDING)
+
+  duration   Int
+  subject_id Int
+  school_id  Int
+  slug       String     @unique
+  name       String
+  type       BattleType
+
+  subject   Subject    @relation(fields: [subject_id], references: [id], onDelete: Cascade)
+  school    School     @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  users     User[]
+  rounds    Round[]
+  questions Question[]
+}
+
+model Round {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  round     Int
+  battle_id Int
+  max_score Int
+  name      String
+
+  battle    Battle     @relation(fields: [battle_id], references: [id], onDelete: Cascade)
+  questions Question[]
+}
+
+model Question {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  battle_id  Int?
+  round_id   Int?
+  content    String
+  difficulty Difficulty
+  level      Int
+
+  battle  Battle?  @relation(fields: [battle_id], references: [id], onDelete: Cascade)
+  round   Round?   @relation(fields: [round_id], references: [id], onDelete: Cascade)
+  options Option[]
+  answers Answer[]
+
+  @@index([battle_id, round_id])
+}
+
+model Option {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  question_id Int
+  content     String
+  isCorrect   Boolean
+
+  question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  answers  Answer[]
+}
+
+model Answer {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  score       Int?
+  user_id     Int
+  option_id   Int
+  question_id Int
+
+  user     User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  option   Option   @relation(fields: [option_id], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [question_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, question_id])
+}
+
+model Challenge {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  school_id   Int?
+  team_id     Int?
+  name        String
+  description String
+
+  school               School?               @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  team                 Team?                 @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  files                File[]
+  challengeSubmissions ChallengeSubmission[]
+}
+
+model ChallengeSubmission {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  status     Situation @default(PENDING)
+
+  user_id      Int
+  challenge_id Int
+  score        Int?
+  feedback     String?
+  links        String?
+
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  challenge Challenge @relation(fields: [challenge_id], references: [id], onDelete: Cascade)
+  files     File[]
+}
+
+model Community {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  school_id Int
+  name      String
+  slug      String @unique
+
+  school School @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  users  User[]
+  posts  Post[]
+}
+
+model Team {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  school_id Int
+  name      String
+  slug      String @unique
+
+  school        School         @relation(fields: [school_id], references: [id], onDelete: Cascade)
+  users         User[]
+  teamRequests  TeamRequest[]
+  challenges    Challenge[]
+  notifications Notification[]
+}
+
+model TeamRequest {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  team_id Int
+  user_id Int
+
+  team Team @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([team_id, user_id])
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  situation  Situation @default(PENDING)
+
+  community_id Int
+  user_id      Int
+  title        String
+  content      String
+
+  community Community @relation(fields: [community_id], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  likes     Like[]
+  files     File[]
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  post_id                Int?
+  challenge_id           Int?
+  challenge_submissionId Int?
+  name                   String
+  url                    String
+  type                   String
+
+  post                 Post?                @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  challenge            Challenge?           @relation(fields: [challenge_id], references: [id], onDelete: Cascade)
+  challenge_submission ChallengeSubmission? @relation(fields: [challenge_submissionId], references: [id])
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  post_id Int
+  user_id Int
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+}
+
+enum NotificationType {
+  LIKE
+  COMMENT
+  FOLLOW
+  TEAM_REQUEST
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  user_id Int?
+  team_id Int?
+
+  type NotificationType
+  read Boolean          @default(false)
+
+  user User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  team Team? @relation(fields: [team_id], references: [id], onDelete: Cascade)
+}
