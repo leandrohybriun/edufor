@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { errorMessages } from "@/config/error-messages";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -36,8 +37,9 @@ export function LoginForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    toast.success("Login realizado com sucesso!");
     console.log(values);
+    toast.success("Login realizado com sucesso!");
+    redirect("/home");
   }
 
   const { isSubmitting, isDirty } = form.formState;
