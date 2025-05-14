@@ -1,6 +1,6 @@
 "use client";
 
-import { LoadingButton } from "@/components/loading-button";
+import { LoadingButton } from "@/components/custom/loading-button";
 import {
   Form,
   FormControl,

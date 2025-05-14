@@ -22,3 +22,18 @@ export function formatUserPvs(pv: number) {
       return "Usuário";
   }
 }
+
+export function formatChallengeLevel(level: number) {
+  switch (level) {
+    case 1:
+      return "Fácil";
+    case 2:
+      return "Médio";
+    case 3:
+      return "Difícil";
+    case 4:
+      return "Todos os níveis";
+    default:
+      return "Nível desconhecido";
+  }
+}

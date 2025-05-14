@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/sidebar";
-import { AppSidebarHeader } from "@/components/sidebar-header";
+import { AppSidebar } from "@/components/sidebar/sidebar";
+import { AppSidebarHeader } from "@/components/sidebar/sidebar-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 interface Props {
@@ -13,7 +13,7 @@ export default function HomeLayout({ children }: Props) {
 
       <SidebarInset className="bg-beige">
         <AppSidebarHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+        {children}
       </SidebarInset>
     </SidebarProvider>
   );

@@ -1,7 +1,7 @@
 "use client";
 
-import { InputPassword } from "@/components/input-password";
-import { LoadingButton } from "@/components/loading-button";
+import { InputPassword } from "@/components/custom/input-password";
+import { LoadingButton } from "@/components/custom/loading-button";
 import {
   Form,
   FormControl,
