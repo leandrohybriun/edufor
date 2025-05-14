@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-  email: z.string().nonempty(errorMessages.notEmpty).email(errorMessages.email),
+  institution_name: z.string().nonempty(errorMessages.notEmpty),
   password: z.string().nonempty(errorMessages.notEmpty),
 });
 
@@ -28,7 +28,7 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      institution_name: "",
       password: "",
     },
   });
@@ -66,7 +66,7 @@ export function LoginForm() {
           <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
-              name="email"
+              name="institution_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome da instituição</FormLabel>
@@ -89,7 +89,12 @@ export function LoginForm() {
                   </FormControl>
                   <FormMessage />
                   <FormDescription className="text-end">
-                    <Link href="/forgot-password">Recuperar senha</Link>
+                    <Link
+                      href="/forgot-password"
+                      className="hover:text-foreground"
+                    >
+                      Recuperar senha
+                    </Link>
                   </FormDescription>
                 </FormItem>
               )}
@@ -107,9 +112,20 @@ export function LoginForm() {
               loading={isSubmitting}
             />
 
-            <Link href="/register" className="text-primary">
-              Cadastrar-se
-            </Link>
+            <div className="flex flex-wrap gap-4 items-center justify-center">
+              <Link
+                href="/login/self"
+                className="text-primary/70 hover:text-primary"
+              >
+                Entrar sem instituição
+              </Link>
+              <Link
+                href="/register"
+                className="text-primary/70 hover:text-primary"
+              >
+                Cadastrar-se
+              </Link>
+            </div>
           </div>
         </form>
       </Form>

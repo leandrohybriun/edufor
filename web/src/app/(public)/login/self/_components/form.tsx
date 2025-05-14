@@ -90,7 +90,12 @@ export function LoginForm() {
                   </FormControl>
                   <FormMessage />
                   <FormDescription className="text-end">
-                    <Link href="/forgot-password">Recuperar senha</Link>
+                    <Link
+                      href="/forgot-password"
+                      className="hover:text-foreground"
+                    >
+                      Recuperar senha
+                    </Link>
                   </FormDescription>
                 </FormItem>
               )}
@@ -110,7 +115,10 @@ export function LoginForm() {
 
             <p className="text-muted-foreground">
               Não possui uma conta?{" "}
-              <Link href="/register" className="text-primary">
+              <Link
+                href="/register"
+                className="text-primary/70 hover:text-primary"
+              >
                 Cadastrar-se
               </Link>
             </p>

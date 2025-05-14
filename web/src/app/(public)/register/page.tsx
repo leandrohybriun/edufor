@@ -1,13 +1,7 @@
 import Image from "next/image";
-import { ForgotPasswordNextForm } from "./_components/form";
+import { RegisterForm } from "./_components/form";
 
-interface Props {
-  searchParams: Promise<{ code?: string }>;
-}
-
-export default async function ForgotPasswordNextPage({ searchParams }: Props) {
-  const { code } = await searchParams;
-
+export default function RegisterPage() {
   return (
     <div className="relative flex min-h-dvh bg-gradient-to-b from-[#891810] via-[#B11813] to-[#E22627]">
       <Image
@@ -28,7 +22,7 @@ export default async function ForgotPasswordNextPage({ searchParams }: Props) {
 
       {/* this image is a line that needs to crop the background */}
       {/* <Image
-        src={"/login2/vector.svg"}
+        src={"/auth/vector.svg"}
         alt="Right Side Vector"
         width={500}
         height={500}
@@ -38,7 +32,7 @@ export default async function ForgotPasswordNextPage({ searchParams }: Props) {
       <div className="lg:flex-1" />
 
       <div className="flex-1 self-center z-10 p-4">
-        <ForgotPasswordNextForm code={code} />
+        <RegisterForm />
       </div>
     </div>
   );

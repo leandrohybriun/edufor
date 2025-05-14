@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { LoginForm } from "./_components/login-form";
+import { LoginForm } from "./_components/form";
 
 export default function LoginPage() {
   return (
@@ -26,7 +26,7 @@ export default function LoginPage() {
           alt="Background"
           width={768}
           height={768}
-          className="absolute object-cover w-full"
+          className="absolute object-cover w-full h-full"
           priority
         />
 
@@ -35,12 +35,12 @@ export default function LoginPage() {
           alt="Background"
           width={553}
           height={553}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96"
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-152"
           priority
         />
       </div>
 
-      <div className="flex-1 z-10 p-4">
+      <div className="flex-1 self-center z-10 p-4">
         <LoginForm />
       </div>
     </div>

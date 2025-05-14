@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { LoginForm } from "./_components/login-form";
+import { LoginForm } from "./_components/form";
 
 export default function LoginPage() {
   return (
@@ -15,9 +15,9 @@ export default function LoginPage() {
       <Image
         src={"/auth/background.svg"}
         alt="Background"
-        width={1920}
-        height={1622}
-        className="fixed left-0 w-full lg:w-[70%]"
+        width={890}
+        height={752}
+        className="fixed left-0 w-full lg:w-3/4 object-cover h-full"
       />
 
       {/* this image is a line that needs to crop the background */}
@@ -31,7 +31,7 @@ export default function LoginPage() {
 
       <div className="lg:flex-1" />
 
-      <div className="flex-1 z-10 p-4">
+      <div className="flex-1 self-center z-10 p-4">
         <LoginForm />
       </div>
     </div>
