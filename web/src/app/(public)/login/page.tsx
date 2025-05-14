@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { LoginForm } from "./_components/login-form";
 
 export default function LoginPage() {
   return (
@@ -8,29 +9,39 @@ export default function LoginPage() {
         alt="Background"
         width={150}
         height={34}
-        className="absolute top-8 left-8 z-10"
+        className="fixed hidden lg:block top-8 left-8 z-10"
       />
 
-      <div className="relative flex-1 hidden lg:flex">
+      <Image
+        src={"/auth/bottom-vector.svg"}
+        alt="Bottom Vector"
+        width={1920}
+        height={120}
+        className="absolute bottom-0 inset-x-0 w-full"
+      />
+
+      <div className="relative flex-1 hidden lg:flex overflow-hidden">
         <Image
-          src="/login/login-icons.svg"
+          src="/auth/login-icons.svg"
           alt="Background"
           width={768}
           height={768}
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute object-cover w-full"
           priority
         />
 
         <Image
-          src="/login/login-vector.svg"
+          src="/auth/login-vector.svg"
           alt="Background"
           width={553}
           height={553}
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96"
+          priority
         />
       </div>
-      <div className="flex-1">
-        {/* card */}
+
+      <div className="flex-1 z-10 p-4">
+        <LoginForm />
       </div>
     </div>
   );
