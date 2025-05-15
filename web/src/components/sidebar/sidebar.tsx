@@ -8,7 +8,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/config/sidebar-links";
 import Image from "next/image";
@@ -35,7 +34,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <SidebarUser />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }

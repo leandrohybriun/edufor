@@ -10,7 +10,7 @@ export function StartedChallenges() {
       image: "/home/started-challenges/image.svg",
       battleRounds: 10,
       battleRoundsCompleted: 5,
-      link: "/challenges/1",
+      link: "/battles/1",
     },
     {
       id: 2,
@@ -18,7 +18,7 @@ export function StartedChallenges() {
       image: "/home/started-challenges/image1.svg",
       battleRounds: 10,
       battleRoundsCompleted: 2,
-      link: "/challenges/2",
+      link: "/battles/2",
     },
     {
       id: 3,
@@ -26,7 +26,7 @@ export function StartedChallenges() {
       image: "/home/started-challenges/image2.svg",
       battleRounds: 10,
       battleRoundsCompleted: 7,
-      link: "/challenges/3",
+      link: "/battles/3",
     },
     {
       id: 4,
@@ -34,7 +34,7 @@ export function StartedChallenges() {
       image: "/home/started-challenges/image3.svg",
       battleRounds: 10,
       battleRoundsCompleted: 9,
-      link: "/challenges/4",
+      link: "/battles/4",
     },
   ];
 
@@ -47,7 +47,7 @@ export function StartedChallenges() {
         return (
           <div
             key={challenge.id}
-            className="bg-[#F3F3F3] flex items-center gap-4 p-4 rounded-lg"
+            className="bg-[#F3F3F3] flex items-center gap-4 p-4 rounded-lg select-none"
           >
             <Image
               src={challenge.image}

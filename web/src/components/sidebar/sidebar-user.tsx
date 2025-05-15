@@ -3,6 +3,7 @@ import { userPvs } from "@/config/user-pvs";
 import { formatUserPvs } from "@/lib/utils";
 import { LogOutIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function SidebarUser() {
   const user = {
@@ -23,8 +24,10 @@ export function SidebarUser() {
         <p className="text-sm">{formatUserPvs(user.role)}</p>
       </div>
 
-      <Button size="icon" variant="sidebar" className="justify-center">
-        <LogOutIcon />
+      <Button size="icon" variant="ghost" asChild>
+        <Link href="/login">
+          <LogOutIcon />
+        </Link>
       </Button>
     </div>
   );

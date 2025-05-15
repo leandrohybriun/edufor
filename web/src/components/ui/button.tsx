@@ -21,6 +21,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         primary_full_rounded:
           "bg-primary text-primary-foreground hover:bg-primary/90 !rounded-full",
+        invite_battle:
+          "bg-[#E51F25] hover:bg-[#d90118] text-[#84181B] cursor-pointer !rounded-full ring-2 ring-white",
         login:
           "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 !rounded-4xl",
         sidebarActive:
@@ -28,6 +30,8 @@ const buttonVariants = cva(
         sidebar:
           "bg-transparent text-foreground w-full justify-start hover:bg-muted-foreground/10",
         sidebarHeader: "bg-muted-foreground/10 text-foreground rounded-full",
+        white_full_rounded:
+          "bg-white text-foreground shadow-xs hover:bg-white/90 !rounded-full",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

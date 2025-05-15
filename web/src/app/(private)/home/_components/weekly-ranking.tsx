@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export function WeeklyRanking() {
@@ -7,26 +8,32 @@ export function WeeklyRanking() {
       name: "Ana",
       points: 2560,
       position: 1,
-      image: "/home/weekly-ranking/top1.png",
+      image: "/home/weekly-ranking/top1.jpg",
     },
     {
       id: 2,
       name: "João",
       points: 1265,
       position: 2,
-      image: "/home/weekly-ranking/top2.png",
+      image: "/home/weekly-ranking/top2.jpg",
     },
     {
       id: 3,
       name: "Ana",
       points: 938,
       position: 3,
-      image: "/home/weekly-ranking/top3.png",
+      image: "/home/weekly-ranking/top3.jpg",
     },
   ];
 
+  const podiumOrder = [2, 1, 3];
+
+  const orderedData = podiumOrder.map(
+    (pos) => data.find((user) => user.position === pos)!
+  );
+
   return (
-    <div className="bg-[#FFDBDB] p-6 rounded-3xl flex flex-col gap-4">
+    <div className="bg-[#FFDBDB] p-6 rounded-3xl flex flex-col gap-4 select-none">
       <div className="flex items-center gap-4">
         <div className="bg-primary w-fit p-2 rounded-md">
           <Image
@@ -42,8 +49,8 @@ export function WeeklyRanking() {
       </div>
 
       <div className="space-y-4">
-        <div className="flex justify-evenly gap-4">
-          {data.map((user) => {
+        <div className="relative flex justify-evenly gap-4">
+          {orderedData.map((user) => {
             const badge = {
               1: "/badges/rank-gold-light.svg",
               2: "/badges/rank-silver-light.svg",
@@ -51,15 +58,24 @@ export function WeeklyRanking() {
             }[user.position];
 
             return (
-              <div key={user.id} className="flex flex-col gap-4">
-                <div className="relative size-16 ring-2 rounded-full">
-                  <Image
-                    key={user.id}
-                    src={user.image}
-                    alt={user.name}
-                    quality={100}
-                    fill
-                  />
+              <div
+                key={user.id}
+                className={cn(
+                  "flex flex-col gap-4",
+                  user.position === 2 && "translate-y-8",
+                  user.position === 3 && "translate-y-14"
+                )}
+              >
+                <div className="relative">
+                  <div className="relative ring-1 rounded-full overflow-clip">
+                    <Image
+                      src={user.image}
+                      alt={user.name}
+                      width={96}
+                      height={96}
+                      className="object-cover object-top bg-muted size-16 sm:size-24 md:size-32 lg:size-16"
+                    />
+                  </div>
 
                   {badge && (
                     <Image
@@ -67,7 +83,7 @@ export function WeeklyRanking() {
                       alt={`Top ${user.position} badge`}
                       width={96}
                       height={96}
-                      className="size-8 absolute top-0 -right-4"
+                      className="size-8 sm:size-12 md:size-16 lg:size-8 absolute top-0 -right-4 sm:-right-8 lg:-right-4"
                     />
                   )}
                 </div>

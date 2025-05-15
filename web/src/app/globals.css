@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@plugin 'tailwind-scrollbar';
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -143,7 +145,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 placeholder:text-muted-foreground selection:bg-primary;
+    @apply border-border outline-ring/50 placeholder:text-muted-foreground scrollbar-thin scrollbar-track-muted-foreground/20 scrollbar-thumb-muted/10 scroll-smooth;
   }
   body {
     @apply bg-background text-foreground;

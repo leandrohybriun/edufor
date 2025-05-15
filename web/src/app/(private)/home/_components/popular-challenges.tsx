@@ -3,6 +3,7 @@ import { challengeLevels, challengeType } from "@/config/challenge";
 import { formatChallengeLevel } from "@/lib/utils";
 import { Gamepad2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const data = [
   {
@@ -10,7 +11,7 @@ const data = [
     level: challengeLevels.easy,
     type: challengeType.team,
     title: "História Geral",
-    link: "/challenges/1",
+    link: "/battles/1",
     color: "#937C7C",
     users: [{ id: 1 }, { id: 2 }, { id: 3 }],
     max_users: 10,
@@ -21,7 +22,7 @@ const data = [
     level: challengeLevels.medium,
     type: challengeType.team,
     title: "Descubra os países",
-    link: "/challenges/2",
+    link: "/battles/2",
     color: "#3CCDF2CC",
     users: [],
     max_users: 10,
@@ -32,7 +33,7 @@ const data = [
     level: challengeLevels.all,
     type: challengeType.team,
     title: "Desafio dos números",
-    link: "/challenges/3",
+    link: "/battles/3",
     color: "#9F2BC8CC",
     users: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
     max_users: 15,
@@ -52,7 +53,7 @@ export function PopularChallenges() {
         {data.map((challenge) => (
           <div
             key={challenge.id}
-            className="flex items-center justify-between text-white p-4 rounded-lg shadow-md mb-4"
+            className="flex items-center justify-between text-white p-4 rounded-lg shadow-md mb-4 select-none"
             style={{ backgroundColor: challenge.color }}
           >
             <div className="space-y-2">
@@ -82,7 +83,9 @@ export function PopularChallenges() {
                 />
                 <p className="text-label">+{challenge.points} XP</p>
               </div>
-              <Button variant="primary_full_rounded">Jogar agora</Button>
+              <Button variant="primary_full_rounded" asChild>
+                <Link href={challenge.link}>Jogar agora</Link>
+              </Button>
             </div>
           </div>
         ))}

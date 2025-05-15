@@ -14,7 +14,7 @@ export function LoadingButton({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
     text: string;
-    loadingText: string;
+    loadingText?: string;
     loading: boolean;
   }) {
   return (

@@ -5,9 +5,9 @@ import { PopularChallenges } from "./_components/popular-challenges";
 import { StartedChallenges } from "./_components/started-challenges";
 import { WeeklyRanking } from "./_components/weekly-ranking";
 
-export default function Page() {
+export default function HomePage() {
   return (
-    <main className="relative flex flex-col-reverse gap-8 xl:flex-row xl:items-start p-4">
+    <main className="relative flex flex-col-reverse gap-8 xl:flex-row xl:items-start p-4 md:p-8">
       <section className="flex-[2] space-y-8">
         <PopularChallenges />
 

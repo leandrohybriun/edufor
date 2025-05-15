@@ -1,7 +1,5 @@
-export default function HomePage() {
-  return (
-    <div>
-      <h1>Homepage</h1>
-    </div>
-  );
+import { redirect } from "next/navigation";
+
+export default function Page() {
+  redirect("/login");
 }

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export function MyProgress() {
   const userProgress = {
@@ -9,7 +10,7 @@ export function MyProgress() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 select-none">
       <div className="text-label font-bold text-muted-foreground px-3 py-2.5">
         Meu progresso
       </div>
@@ -20,31 +21,31 @@ export function MyProgress() {
           alt="Top vector"
           width={100}
           height={100}
-          className="absolute -top-4 right-0 w-full z-10"
+          className="absolute -top-4 right-0 w-full z-10 pointer-events-none"
         />
 
         <Image
           src="/home/my-progress/bottom-left-vector.svg"
-          alt="Bottom left vector"
+          alt="Bottom Left Vector"
           width={100}
           height={100}
-          className="absolute left-0 bottom-0 z-10"
+          className="absolute left-0 bottom-0 z-10 pointer-events-none"
         />
 
         <Image
           src="/home/my-progress/trophies.svg"
-          alt="Trophies"
+          alt="Right Side Vector"
           width={100}
           height={100}
-          className="absolute top-0 right-0 size-24 sm:size-32 z-20"
+          className="absolute top-0 right-0 size-24 sm:size-32 z-20 pointer-events-none"
         />
 
         <Image
           src="/home/my-progress/trophies.svg"
-          alt="Trophies"
+          alt="Bottom Middle Vector"
           width={50}
           height={50}
-          className="absolute left-1/4 -bottom-4 sm:-bottom-8 size-16 sm:size-24 z-20"
+          className="absolute left-1/4 -bottom-4 sm:-bottom-8 size-16 sm:size-24 z-20 pointer-events-none"
         />
 
         <div className="space-y-4">
@@ -54,7 +55,7 @@ export function MyProgress() {
               alt="Trophy"
               width={40}
               height={40}
-              className="size-6"
+              className="size-6 pointer-events-none"
             />
 
             <p className="font-medium">Nível {userProgress.level}</p>
@@ -66,13 +67,15 @@ export function MyProgress() {
               alt="XP"
               width={40}
               height={40}
-              className="size-6"
+              className="size-6 pointer-events-none"
             />
             <p>{userProgress.xp}XP</p>
           </div>
 
           <div className="flex items-center justify-end">
-            <Button variant="ghost">Ver detalhes</Button>
+            <Button variant="ghost" asChild>
+              <Link href="/progress">Ver detalhes</Link>
+            </Button>
           </div>
         </div>
       </div>
