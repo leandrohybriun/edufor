@@ -10,7 +10,7 @@ export function MyProgress() {
   };
 
   return (
-    <div className="flex flex-col gap-4 select-none">
+    <div className="flex flex-col gap-4">
       <div className="text-label font-bold text-muted-foreground px-3 py-2.5">
         Meu progresso
       </div>

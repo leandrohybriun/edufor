@@ -18,6 +18,8 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost: "bg-transparent hover:bg-muted-foreground/10",
+        ghost_full_rounded:
+          "bg-transparent hover:bg-muted-foreground/10 !rounded-full",
         link: "text-primary underline-offset-4 hover:underline",
         primary_full_rounded:
           "bg-primary text-primary-foreground hover:bg-primary/90 !rounded-full",

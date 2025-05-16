@@ -21,7 +21,7 @@ interface Props {
 export function BattleCard({ hideButton = false, ...props }: Props) {
   return (
     <div
-      className="flex items-center justify-between text-white p-4 rounded-lg shadow-md mb-4 select-none"
+      className="flex items-center justify-between text-white p-4 rounded-lg shadow-md"
       style={{ backgroundColor: props.color }}
     >
       <div className="space-y-2">

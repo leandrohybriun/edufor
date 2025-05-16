@@ -53,7 +53,7 @@ export function PopularChallenges() {
         {data.map((challenge) => (
           <div
             key={challenge.id}
-            className="flex items-center justify-between text-white p-4 rounded-lg shadow-md mb-4 select-none"
+            className="flex items-center justify-between text-white p-4 rounded-lg shadow-md mb-4"
             style={{ backgroundColor: challenge.color }}
           >
             <div className="space-y-2">

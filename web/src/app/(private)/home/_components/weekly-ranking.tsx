@@ -33,7 +33,7 @@ export function WeeklyRanking() {
   );
 
   return (
-    <div className="bg-[#FFDBDB] p-6 rounded-3xl flex flex-col gap-4 select-none">
+    <div className="bg-[#FFDBDB] p-6 rounded-3xl flex flex-col gap-4">
       <div className="flex items-center gap-4">
         <div className="bg-primary w-fit p-2 rounded-md">
           <Image

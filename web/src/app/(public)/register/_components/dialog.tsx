@@ -1,7 +1,7 @@
 "use client";
 
+import { SearchInput } from "@/app/(public)/register/_components/search-school-input";
 import { LoadingButton } from "@/components/custom/loading-button";
-import { SearchInput } from "@/components/custom/search-input";
 import {
   Dialog,
   DialogContent,

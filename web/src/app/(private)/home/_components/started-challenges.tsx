@@ -47,7 +47,7 @@ export function StartedChallenges() {
         return (
           <div
             key={challenge.id}
-            className="bg-[#F3F3F3] flex items-center gap-4 p-4 rounded-lg select-none"
+            className="bg-[#F3F3F3] flex items-center gap-4 p-4 rounded-lg"
           >
             <Image
               src={challenge.image}

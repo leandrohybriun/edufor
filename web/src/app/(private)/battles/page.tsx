@@ -12,7 +12,9 @@ export default function BattlesPage() {
       </div>
 
       <SubjectsRow />
+
       <BattlesRow />
+      
       <ExploreSubjectsRow />
     </main>
   );

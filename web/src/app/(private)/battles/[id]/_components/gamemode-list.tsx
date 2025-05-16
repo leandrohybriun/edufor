@@ -16,16 +16,10 @@ export function GamemodeList() {
       description: "Monte um time e vença com estratégia!",
       image: "/battles/battle_id/team.svg",
     },
-    {
-      id: 3,
-      title: "Testar conhecimento",
-      description: "Pratique com perguntas aleatórias ",
-      image: "/battles/battle_id/practice.svg",
-    },
   ];
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
       {options.map((option) => (
         <div
           key={option.id}

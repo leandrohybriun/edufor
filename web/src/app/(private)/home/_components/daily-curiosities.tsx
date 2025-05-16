@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function DailyCuriositis() {
   return (
-    <div className="relative bg-[#C9E7FF] p-6 rounded-3xl overflow-clip select-none">
+    <div className="relative bg-[#C9E7FF] p-6 rounded-3xl overflow-clip">
       <Image
         src="/home/daily-curiosities/bottom-vector.svg"
         alt="Vector"

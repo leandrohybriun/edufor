@@ -3,21 +3,35 @@
 import { NotificationSheet } from "@/components/sheets/notification-sheet";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ChevronLeftIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function AppSidebarHeader() {
+  const router = useRouter();
   const pathname = usePathname();
 
   const isHomePage = pathname === "/home";
+  const isSubroute = pathname.split("/").length > 2;
 
   return (
     <header className="h-24 flex items-center gap-4 px-4 md:px-8 py-4">
       <SidebarTrigger
-        variant="sidebarHeader"
+        variant="ghost_full_rounded"
         className="justify-center size-10"
       />
+
+      {isSubroute && (
+        <Button
+          variant="ghost_full_rounded"
+          className="text-muted-foreground"
+          onClick={() => router.back()}
+        >
+          <ChevronLeftIcon />
+          Voltar
+        </Button>
+      )}
 
       <Button variant="primary_full_rounded" asChild>
         <Link href="/progress">
