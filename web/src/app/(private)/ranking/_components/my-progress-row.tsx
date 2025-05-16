@@ -3,7 +3,11 @@ import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export function MyProgressRow() {
+interface Props {
+  hideButton?: boolean;
+}
+
+export function MyProgressRow({ hideButton }: Props) {
   const performanceData = [
     {
       id: 1,
@@ -45,11 +49,13 @@ export function MyProgressRow() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-subtitle font-semibold">Meu desempenho</h1>
 
-        <Button variant="ghost" className="text-primary" asChild>
-          <Link href="/ranking/expanded">
-            Ver mais detalhes <ChevronRightIcon />
-          </Link>
-        </Button>
+        {!hideButton && (
+          <Button variant="ghost" className="text-primary" asChild>
+            <Link href="/ranking/expanded">
+              Ver mais detalhes <ChevronRightIcon />
+            </Link>
+          </Button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 xl:gap-8 xl:grid-cols-2">

@@ -74,7 +74,7 @@ export function MyProgress() {
 
           <div className="flex items-center justify-end">
             <Button variant="ghost" asChild>
-              <Link href="/progress">Ver detalhes</Link>
+              <Link href="/ranking/expanded">Ver detalhes</Link>
             </Button>
           </div>
         </div>

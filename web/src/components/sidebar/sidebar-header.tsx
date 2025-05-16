@@ -34,7 +34,7 @@ export function AppSidebarHeader() {
       )}
 
       <Button variant="primary_full_rounded" asChild>
-        <Link href="/progress">
+        <Link href="/ranking/expanded">
           <Image
             src="/icons/filled/trophy.svg"
             alt="Trophy"
