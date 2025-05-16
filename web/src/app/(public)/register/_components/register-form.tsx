@@ -5,7 +5,6 @@ import { LoadingButton } from "@/components/custom/loading-button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,31 +14,33 @@ import { Input } from "@/components/ui/input";
 import { errorMessages } from "@/config/error-messages";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
+import { RegisterSchoolDialog } from "./dialog";
 
 const formSchema = z.object({
+  name: z.string().nonempty(errorMessages.notEmpty),
   email: z.string().nonempty(errorMessages.notEmpty).email(errorMessages.email),
   password: z.string().nonempty(errorMessages.notEmpty),
 });
 
-export function LoginForm() {
+export function RegisterForm() {
+  const [open, setOpen] = useState(false);
+  const [values, setValues] = useState<z.infer<typeof formSchema>>();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    console.log(values);
-    toast.success("Login realizado com sucesso!");
-    redirect("/home");
+    setValues(values);
+    setOpen(true);
   }
 
   const { isSubmitting, isDirty } = form.formState;
@@ -51,22 +52,44 @@ export function LoginForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col h-full text-center gap-16"
         >
+          {values && (
+            <RegisterSchoolDialog
+              open={open}
+              onOpenChange={setOpen}
+              values={values}
+            />
+          )}
+
           <div className="space-y-4">
             <h1 className="text-[31px] font-bold text-primary">
-              Bem-vindo de volta!
+              Crie sua conta
             </h1>
 
             <h3 className="text-2xl text-foreground font-semibold">
-              Entre e continue sua jornada de conhecimento.
+              Inicie sua jornada na arena do conhecimento
             </h3>
 
             <p className="text-paragraph text-muted-foreground">
-              Acesse sua conta para entrar nas batalhas, desafiar amigos e
-              mostrar tudo o que sabe.
+              Cadastre-se rapidinho com e-mail e senha e comece a desafiar
+              outros estudantes
             </p>
           </div>
 
           <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="email"
@@ -91,14 +114,6 @@ export function LoginForm() {
                     <InputPassword {...field} />
                   </FormControl>
                   <FormMessage />
-                  <FormDescription className="text-end">
-                    <Link
-                      href="/forgot-password"
-                      className="hover:text-foreground"
-                    >
-                      Recuperar senha
-                    </Link>
-                  </FormDescription>
                 </FormItem>
               )}
             />
@@ -109,19 +124,16 @@ export function LoginForm() {
               size="xl"
               variant="login"
               type="submit"
-              text="Entrar"
-              loadingText="Entrando..."
+              text="Cadastrar"
+              loadingText="Cadastrando..."
               disabled={isSubmitting || !isDirty}
               loading={isSubmitting}
             />
 
             <p className="text-muted-foreground">
-              Não possui uma conta?{" "}
-              <Link
-                href="/register"
-                className="text-primary/70 hover:text-primary"
-              >
-                Cadastrar-se
+              Já possui uma conta?{" "}
+              <Link href="/login" className="text-primary font-medium">
+                Entrar na conta
               </Link>
             </p>
           </div>

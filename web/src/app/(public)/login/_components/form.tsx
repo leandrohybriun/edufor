@@ -19,18 +19,21 @@ import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { SchoolCombobox } from "./scholl-combobox";
 
 const formSchema = z.object({
-  institution_name: z.string().nonempty(errorMessages.notEmpty),
+  email: z.string().nonempty(errorMessages.notEmpty).email(errorMessages.email),
   password: z.string().nonempty(errorMessages.notEmpty),
+  school_id: z.string().optional(),
 });
 
 export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      institution_name: "",
+      email: "",
       password: "",
+      school_id: "",
     },
   });
 
@@ -49,31 +52,46 @@ export function LoginForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col h-full text-center gap-16 max-w-md mx-auto"
+          className="flex flex-col h-full text-center gap-16"
         >
           <div className="space-y-4">
             <h1 className="text-[31px] font-bold text-primary">
-              Bem-vindo à EduFor!
+              Bem-vindo de volta!
             </h1>
 
             <h3 className="text-2xl text-foreground font-semibold">
-              Entre na arena do conhecimento
+              Entre e continue sua jornada de conhecimento.
             </h3>
 
-            <p className="text-paragraph text-muted-foreground max-w-sm mx-auto">
-              Supere desafios, ganhe batalhas e aprenda jogando.
+            <p className="text-paragraph text-muted-foreground">
+              Acesse sua conta para entrar nas batalhas, desafiar amigos e
+              mostrar tudo o que sabe.
             </p>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
             <FormField
               control={form.control}
-              name="institution_name"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome da instituição</FormLabel>
+                  <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input autoComplete="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="school_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Selecione a sua escola</FormLabel>
+                  <FormControl>
+                    <SchoolCombobox onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +121,7 @@ export function LoginForm() {
             />
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
             <LoadingButton
               size="xl"
               variant="login"
@@ -114,20 +132,15 @@ export function LoginForm() {
               loading={isSubmitting}
             />
 
-            <div className="flex flex-wrap gap-4 items-center justify-center">
-              <Link
-                href="/login/self"
-                className="text-primary/70 hover:text-primary"
-              >
-                Entrar sem instituição
-              </Link>
+            <p className="text-muted-foreground">
+              Não possui uma conta?{" "}
               <Link
                 href="/register"
                 className="text-primary/70 hover:text-primary"
               >
                 Cadastrar-se
               </Link>
-            </div>
+            </p>
           </div>
         </form>
       </Form>

@@ -5,40 +5,31 @@ export default function LoginPage() {
   return (
     <div className="relative flex min-h-dvh bg-gradient-to-b from-[#891810] via-[#B11813] to-[#E22627]">
       <Image
-        src="/logo/logo-white.svg"
-        alt="Background"
+        src="/logo/logo-mixed.svg"
+        alt="Logo"
         width={150}
         height={34}
         className="fixed hidden lg:block top-8 left-8 z-10"
       />
 
       <Image
-        src={"/auth/bottom-vector.svg"}
-        alt="Bottom Vector"
-        width={1920}
-        height={120}
-        className="absolute bottom-0 inset-x-0 w-full"
+        src={"/auth/background.svg"}
+        alt="Background"
+        width={890}
+        height={752}
+        className="fixed left-0 w-full lg:w-3/4 object-cover h-full"
       />
 
-      <div className="relative flex-1 hidden lg:flex overflow-hidden">
-        <Image
-          src="/auth/login-icons.svg"
-          alt="Background"
-          width={768}
-          height={768}
-          className="absolute object-cover w-full h-full"
-          priority
-        />
+      {/* this image is a line that needs to crop the background */}
+      {/* <Image
+        src={"/auth/vector.svg"}
+        alt="Right Side Vector"
+        width={500}
+        height={500}
+        className="fixed w-full h-full object-contain lg:top-0"
+      /> */}
 
-        <Image
-          src="/auth/login-vector.svg"
-          alt="Background"
-          width={553}
-          height={553}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-152"
-          priority
-        />
-      </div>
+      <div className="lg:flex-1" />
 
       <div className="flex-1 self-center z-10 p-4">
         <LoginForm />

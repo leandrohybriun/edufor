@@ -19,6 +19,7 @@ export function InputPassword({
     <div className="relative">
       <Input
         type={showPassword ? "text" : "password"}
+        autoComplete="current-password"
         className={cn("pr-12", className)}
         {...props}
       />
@@ -28,9 +29,9 @@ export function InputPassword({
         className="absolute right-4 top-1/2 transform -translate-y-1/2"
       >
         {showPassword ? (
-          <EyeOff className="text-muted-foreground" />
+          <EyeOff className="size-4 text-muted-foreground" />
         ) : (
-          <Eye className="text-muted-foreground" />
+          <Eye className="size-4 text-muted-foreground" />
         )}
       </button>
     </div>

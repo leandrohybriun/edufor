@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { BattleHeader } from "./battle/[id]/_components/header";
-import { BattleTeam } from "./battle/[id]/_components/team";
+import { BattleHeader } from "./battle/[slug]/_components/header";
+import { BattleTeam } from "./battle/[slug]/_components/team";
 
 interface Props {
   children: React.ReactNode;
@@ -8,12 +8,13 @@ interface Props {
 
 export default function BattleLayout({ children }: Props) {
   return (
-    <main className="relative flex flex-col min-h-dvh">
+    <main className="flex flex-col min-h-dvh">
       <Image
         src="/battle/background.jpg"
-        className="-z-10 object-cover"
+        className="fixed inset-0 object-cover w-full h-full -z-10"
+        width={1920}
+        height={1080}
         alt="Background"
-        fill
       />
 
       <BattleHeader />

@@ -40,7 +40,7 @@ export function GamemodeList() {
           />
 
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-subtitle font-medium">{option.title}</p>
+            <h3 className="text-subtitle font-medium">{option.title}</h3>
 
             <p>{option.description}</p>
 
